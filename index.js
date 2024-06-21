@@ -1,6 +1,6 @@
 const express = require('express');
-
 const app = express();
+
 
 const animeQuotes = [
   {
@@ -460,3 +460,9 @@ const port = 3000;
 app.listen(port, () => {
   console.log(`Server running at http://127.0.0.1:${port}/anime-quotes`);
 });
+
+app.get('/api/anime-quotes', (req, res) => {
+  res.json(animeQuotes);
+});
+
+module.exports = app;
