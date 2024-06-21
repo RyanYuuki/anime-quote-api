@@ -467,8 +467,11 @@ app.get('/api/anime-quotes/AnimeName/:AnimeName', (req, res) => {
 });
 
 app.get('/api/anime-quotes/character/:character', (req, res) => {
-  const character = req.params.character;
-  const quote = animeQuotes.find(q => q.character.toLowerCase() === character.toLowerCase());
+  const character = req.params.character.toLowerCase();
+  const quote = animeQuotes.find(q => {
+    const characterNames = q.character.toLowerCase().split(' ');
+    return characterNames.includes(character);
+  });
   if (quote) {
     res.json(quote);
   } else {
