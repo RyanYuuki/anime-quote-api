@@ -452,7 +452,7 @@ const animeQuotes = [
 ];
 
 
-app.get('/api/anime-quotes', (req, res) => {
+app.get('/api/anime-quotes/', (req, res) => {
   res.json(animeQuotes);
 });
 

@@ -1,0 +1,13 @@
+{
+    "version": 2,
+    "builds": [
+      { "src": "api/anime-quotes.js", "use": "@vercel/node" }
+    ],
+    "routes": [
+      { "src": "/api/anime-quotes", "dest": "/api/anime-quotes.js" },
+      { "src": "/api/anime-quotes/name/(.*)", "dest": "/api/anime-quotes.js" },
+      { "src": "/api/anime-quotes/character/(.*)", "dest": "/api/anime-quotes.js" },
+      { "src": "/api/anime-quotes/random", "dest": "/api/anime-quotes.js" }
+    ]
+  }
+  
