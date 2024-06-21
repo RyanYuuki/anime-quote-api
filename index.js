@@ -456,9 +456,12 @@ app.get('/api/anime-quotes/', (req, res) => {
   res.json(animeQuotes);
 });
 
-app.get('/api/anime-quotes/AnimeName/:AnimeName', (req, res) => {
-  const AnimeName = req.params.AnimeName;
-  const quote = animeQuotes.find(q => q.AnimeName.toLowerCase() === AnimeName.toLowerCase());
+app.get('/api/anime-quotes/name/:AnimeName', (req, res) => {
+  const AnimeName = req.params.AnimeName.toLowerCase();
+  const quote = animeQuotes.find(q => {
+    const animeNames = q.AnimeName.toLowerCase().split(' ');
+    return animeNames.includes(AnimeName);
+  });
   if (quote) {
     res.json(quote);
   } else {
@@ -478,6 +481,7 @@ app.get('/api/anime-quotes/character/:character', (req, res) => {
     res.status(404).json({ error: 'Quote not found' });
   }
 });
+
 
 app.get('/api/anime-quotes/random', (req, res) => {
   const randomIndex = Math.floor(Math.random() * animeQuotes.length);
