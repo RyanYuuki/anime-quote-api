@@ -451,34 +451,54 @@ const animeQuotes = [
   },
 ];
 
+const getRandomQuoteByAnimeName = (animeName) => {
+  const matchingQuotes = animeQuotes.filter(q => normalize(q.AnimeName) === normalize(animeName));
+  if (matchingQuotes.length === 0) {
+    return null;
+  }
+  const randomIndex = Math.floor(Math.random() * matchingQuotes.length);
+  return matchingQuotes[randomIndex];
+};
+
+const getRandomQuoteByCharacter = (character) => {
+  const matchingQuotes = animeQuotes.filter(q => normalize(q.character) === normalize(character));
+  if (matchingQuotes.length === 0) {
+    return null;
+  }
+  const randomIndex = Math.floor(Math.random() * matchingQuotes.length);
+  return matchingQuotes[randomIndex];
+};
+
 const normalize = (str) => str.toLowerCase().replace(/\s+/g, '');
 
-app.get('/api/random', (req, res) => {
+app.get('/api/anime-quotes/', (req, res) => {
+  res.json(animeQuotes);
+});
+
+app.get('/api/anime-quotes/name/:AnimeName', (req, res) => {
+  const AnimeName = req.params.AnimeName;
+  const quote = getRandomQuoteByAnimeName(AnimeName);
+  if (quote) {
+    res.json(quote);
+  } else {
+    res.status(404).json({ error: 'Quote not found' });
+  }
+});
+
+app.get('/api/anime-quotes/character/:character', (req, res) => {
+  const character = req.params.character;
+  const quote = getRandomQuoteByCharacter(character);
+  if (quote) {
+    res.json(quote);
+  } else {
+    res.status(404).json({ error: 'Quote not found' });
+  }
+});
+
+app.get('/api/anime-quotes/random', (req, res) => {
   const randomIndex = Math.floor(Math.random() * animeQuotes.length);
   const randomQuote = animeQuotes[randomIndex];
   res.json(randomQuote);
-});
-
-app.get('/api/name', (req, res) => {
-  const animeName = normalize(req.query.q || '');
-  const matchingQuotes = animeQuotes.filter(q => normalize(q.AnimeName) === animeName);
-  if (matchingQuotes.length > 0) {
-    const randomIndex = Math.floor(Math.random() * matchingQuotes.length);
-    res.json(matchingQuotes[randomIndex]);
-  } else {
-    res.status(404).json({ error: 'Quote not found' });
-  }
-});
-
-app.get('/api/character', (req, res) => {
-  const character = normalize(req.query.q || '');
-  const matchingQuotes = animeQuotes.filter(q => normalize(q.character) === character);
-  if (matchingQuotes.length > 0) {
-    const randomIndex = Math.floor(Math.random() * matchingQuotes.length);
-    res.json(matchingQuotes[randomIndex]);
-  } else {
-    res.status(404).json({ error: 'Quote not found' });
-  }
 });
 
 module.exports = app;
