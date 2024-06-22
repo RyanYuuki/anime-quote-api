@@ -452,14 +452,35 @@ const animeQuotes = [
 ];
 
 
+const getRandomQuoteByAnimeName = (animeName) => {
+  const matchingQuotes = animeQuotes.filter(q => q.AnimeName.toLowerCase() === animeName.toLowerCase());
+  if (matchingQuotes.length === 0) {
+    return null;
+  }
+  const randomIndex = Math.floor(Math.random() * matchingQuotes.length);
+  return matchingQuotes[randomIndex];
+};
+
+// Helper function to get random quote by character
+const getRandomQuoteByCharacter = (character) => {
+  const matchingQuotes = animeQuotes.filter(q => q.character.toLowerCase() === character.toLowerCase());
+  if (matchingQuotes.length === 0) {
+    return null;
+  }
+  const randomIndex = Math.floor(Math.random() * matchingQuotes.length);
+  return matchingQuotes[randomIndex];
+};
+
+// Helper function to normalize query parameters
+const normalize = (str) => str.toLowerCase().replace(/\s+/g, '');
+
 app.get('/api/anime-quotes/', (req, res) => {
   res.json(animeQuotes);
 });
-const normalize = (str) => str.toLowerCase().replace(/\s+/g, '');
 
 app.get('/api/anime-quotes/name/:AnimeName', (req, res) => {
   const AnimeName = normalize(req.params.AnimeName);
-  const quote = animeQuotes.find(q => normalize(q.AnimeName) === AnimeName);
+  const quote = getRandomQuoteByAnimeName(AnimeName);
   if (quote) {
     res.json(quote);
   } else {
@@ -469,7 +490,7 @@ app.get('/api/anime-quotes/name/:AnimeName', (req, res) => {
 
 app.get('/api/anime-quotes/character/:character', (req, res) => {
   const character = normalize(req.params.character);
-  const quote = animeQuotes.find(q => normalize(q.character) === character);
+  const quote = getRandomQuoteByCharacter(character);
   if (quote) {
     res.json(quote);
   } else {
